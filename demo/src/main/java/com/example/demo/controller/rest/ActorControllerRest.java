@@ -18,7 +18,12 @@ public interface ActorControllerRest {
 
     NetflixResponse<ActorRestPost> updateActor(ActorRestPost actor) throws NetflixException;
 
-    NetflixResponse<Object> deleteActor(Long id) throws NetflixException;
-
+    void deleteActor(Long id) throws NetflixException;
+    
+    /*
+     * As a user, I want to view all tv shows and chapters a specific actor is in
+     * The result JSON value must include id, name, description, tv shows and
+     * chapters
+     */
 
 }

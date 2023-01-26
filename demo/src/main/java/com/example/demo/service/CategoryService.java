@@ -1,17 +1,21 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import com.example.demo.persistence.entity.CategoryEntity;
+import com.example.demo.controller.rest.model.CategoryRest;
+import com.example.demo.controller.rest.model.restCategory.CategoryRestPost;
+import com.example.demo.exception.NetflixException;
 
 public interface CategoryService {
-    List<CategoryEntity> getAllCategories();
+    Page<CategoryRest> getAllCategorys(Pageable pageable) throws NetflixException;
 
-    Optional<CategoryEntity> getCategoryById(Long id);
+    CategoryRest getCategoryById(Long id) throws NetflixException;
 
-    CategoryEntity save(CategoryEntity Category);
+    CategoryRestPost createCategory(CategoryRestPost category) throws NetflixException;
 
-    void deleteCategory(Long id) ;
+    CategoryRestPost updateCategory(CategoryRestPost category) throws NetflixException;
+
+    void deleteCategory(Long id) throws NetflixException;
 
 }

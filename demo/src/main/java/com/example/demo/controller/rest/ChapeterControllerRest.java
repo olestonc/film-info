@@ -18,7 +18,7 @@ public interface ChapeterControllerRest {
 
     NetflixResponse<ChapeterRestPost> updateChapeter(ChapeterRestPost chapeter) throws NetflixException;
 
-    NetflixResponse<Object> deleteChapeter(Long id) throws NetflixException;
+    void deleteChapeter(Long id) throws NetflixException;
 
 
 }

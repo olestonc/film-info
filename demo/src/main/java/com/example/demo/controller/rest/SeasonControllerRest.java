@@ -18,7 +18,7 @@ public interface SeasonControllerRest {
 
     NetflixResponse<SeasonRestPost> updateSeason(SeasonRestPost season) throws NetflixException;
 
-    NetflixResponse<Object> deleteSeason(Long id) throws NetflixException;
+   void deleteSeason(Long id) throws NetflixException;
 
 
 }

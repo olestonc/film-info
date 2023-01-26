@@ -1,13 +1,14 @@
 package com.example.demo.controller.rest.model;
 
+import com.example.demo.persistence.entity.ChapeterEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +25,6 @@ public class ActorRest implements Serializable {
     @JsonProperty("description")
     private String description;
 
+    @JsonProperty("chapeters")
+    private Set<ChapeterEntity> chapeters;
 }

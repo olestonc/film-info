@@ -1,6 +1,7 @@
 package com.example.demo.controller.rest.model;
 
 import com.example.demo.persistence.entity.ActorEntity;
+import com.example.demo.persistence.entity.SeasonEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -32,4 +33,6 @@ public class ChapeterRest implements Serializable {
     @JsonProperty("actors")
     private Set<ActorEntity> actors;
 
+    @JsonProperty("season")
+    private SeasonEntity season;
 }

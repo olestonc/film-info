@@ -10,7 +10,8 @@ import com.example.demo.exception.NetflixException;
 
 public interface CategoryControllerRest {
 
-    NetflixResponse<D4iPageRest<CategoryRest>> getAllCategorys(int page, int size, Pageable pageable) throws NetflixException;
+    NetflixResponse<D4iPageRest<CategoryRest>> getAllCategories(int page, int size, Pageable pageable)
+            throws NetflixException;
 
     NetflixResponse<CategoryRest> getCategoryById(Long id) throws NetflixException;
 
@@ -18,7 +19,6 @@ public interface CategoryControllerRest {
 
     NetflixResponse<CategoryRestPost> updateCategory(CategoryRestPost category) throws NetflixException;
 
-    NetflixResponse<Object> deleteCategory(Long id) throws NetflixException;
-
+    void deleteCategory(Long id) throws NetflixException;
 
 }

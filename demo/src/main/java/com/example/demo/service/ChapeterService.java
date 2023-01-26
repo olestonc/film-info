@@ -1,17 +1,21 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
-import com.example.demo.persistence.entity.ChapeterEntity;
+import com.example.demo.controller.rest.model.ChapeterRest;
+import com.example.demo.controller.rest.model.restChapeter.ChapeterRestPost;
+import com.example.demo.exception.NetflixException;
 
 public interface ChapeterService {
-    List<ChapeterEntity> getAllChapeters();
+    Page<ChapeterRest> getAllChapeters(Pageable pageable) throws NetflixException;
 
-    Optional<ChapeterEntity> getChapeterById(Long id);
+    ChapeterRest getChapeterById(Long id) throws NetflixException;
 
-    ChapeterEntity save(ChapeterEntity Chapeter);
+    ChapeterRestPost createChapeter(ChapeterRestPost chapeter) throws NetflixException;
 
-    void deleteChapeter(Long id);
+    ChapeterRestPost updateChapeter(ChapeterRestPost chapeter) throws NetflixException;
+
+    void deleteChapeter(Long id) throws NetflixException;
 
 }

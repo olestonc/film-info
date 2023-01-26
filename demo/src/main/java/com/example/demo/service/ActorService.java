@@ -1,17 +1,20 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
-import com.example.demo.persistence.entity.ActorEntity;
+import com.example.demo.controller.rest.model.ActorRest;
+import com.example.demo.controller.rest.model.restActor.ActorRestPost;
+import com.example.demo.exception.NetflixException;
 
 public interface ActorService {
-    List<ActorEntity> getAllActors();
+    Page<ActorRest> getAllActors(Pageable pageable) throws NetflixException;
 
-    Optional<ActorEntity> getActorById(Long id);
+    ActorRest getActorById(Long id) throws NetflixException;
 
-    ActorEntity save(ActorEntity Actor);
+    ActorRestPost createActor(ActorRestPost actor) throws NetflixException;
 
-    void deleteActor(Long id);
+    ActorRestPost updateActor(ActorRestPost actor) throws NetflixException;
 
+    void deleteActor(Long id) throws NetflixException;
 }

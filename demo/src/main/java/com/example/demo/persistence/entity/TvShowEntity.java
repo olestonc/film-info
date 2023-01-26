@@ -45,7 +45,7 @@ public class TvShowEntity implements Serializable {
 
     private boolean advertising;// El programa está propocionado
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private CategoryEntity category;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

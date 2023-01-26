@@ -1,17 +1,21 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
-import com.example.demo.persistence.entity.SeasonEntity;
+import com.example.demo.controller.rest.model.SeasonRest;
+import com.example.demo.controller.rest.model.restSeason.SeasonRestPost;
+import com.example.demo.exception.NetflixException;
 
 public interface SeasonService {
-    List<SeasonEntity> getAllSeasons();
+    Page<SeasonRest> getAllSeasons(Pageable pageable) throws NetflixException;
 
-    Optional<SeasonEntity> getSeasonById(Long id);
+    SeasonRest getSeasonById(Long id) throws NetflixException;
 
-    SeasonEntity save(SeasonEntity Season);
+    SeasonRestPost createSeason(SeasonRestPost season) throws NetflixException;
 
-    void deleteSeason(Long id);
+    SeasonRestPost updateSeason(SeasonRestPost season) throws NetflixException;
+
+    void deleteSeason(Long id) throws NetflixException;
 
 }

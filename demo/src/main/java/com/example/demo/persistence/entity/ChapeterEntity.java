@@ -2,11 +2,14 @@ package com.example.demo.persistence.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -33,9 +36,11 @@ public class ChapeterEntity {
 
     private int duration;// mins
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+            CascadeType.MERGE })
     private Set<ActorEntity> actors;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SeasonEntity season;
 
-    
 }

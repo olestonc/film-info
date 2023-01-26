@@ -6,11 +6,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,11 +33,16 @@ public class SeasonEntity implements Serializable {
     private Long id;
 
     private int number;
+    
     private String name;
+
     @Column(length = 65555)
     private String longDescription;// Algún tipo de dato más apropiado?
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "season", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<ChapeterEntity> chapeters;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TvShowEntity tvShow;
 
 }

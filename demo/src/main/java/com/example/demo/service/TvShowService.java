@@ -1,17 +1,30 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import com.example.demo.persistence.entity.TvShowEntity;
+import com.example.demo.controller.rest.model.restTvShow.TvShowRestCategory;
+import com.example.demo.controller.rest.model.restTvShow.TvShowRestSeason;
+import com.example.demo.controller.rest.model.restTvShow.TvShowRestShort;
+import com.example.demo.exception.NetflixException;
 
 public interface TvShowService {
-    List<TvShowEntity> getAllTvShows();
+    Page<TvShowRestShort> getAllTvShows(Pageable pageable) throws NetflixException;
 
-    Optional<TvShowEntity> getTvShowById(Long id);
+    TvShowRestShort getTvShowById(Long id) throws NetflixException;
 
-    TvShowEntity save(TvShowEntity TvShow);
+    TvShowRestShort createTvShow(TvShowRestShort tvshow) throws NetflixException;
 
-    void deleteTvShow(Long id);
+    TvShowRestShort updateTvShow(TvShowRestShort tvshow) throws NetflixException;
+
+    TvShowRestSeason addSeasonOfTvShow(Long tvshowId, Long seasonId)  throws NetflixException;
+
+    TvShowRestCategory addCategoryOfTvShow(Long tvshowId, Long categoryId) throws NetflixException;
+    
+    void deleteTvShow(Long id) throws NetflixException;
+
+    void deleteSeasonOfTvShow(Long tvshowId, Long seasonId) throws NetflixException;
+
+    void deleteCategoryOfTvShow(Long tvshowId) throws NetflixException;
 
 }

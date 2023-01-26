@@ -1,9 +1,14 @@
 package com.example.demo.persistence.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -28,5 +33,8 @@ public class ActorEntity {
 
     private String description;
 
+    @ManyToMany(mappedBy = "actors", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+            CascadeType.MERGE })
+    private Set<ChapeterEntity> chapeters;
 
 }
