@@ -5,7 +5,7 @@
             "name": "Spring Boot-DemoApplication<netflix>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "com.example.demo.DemoApplication",
+            "mainClass": "com.nttdata.bootcamp.DemoApplication",
             "projectName": "netflix",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
