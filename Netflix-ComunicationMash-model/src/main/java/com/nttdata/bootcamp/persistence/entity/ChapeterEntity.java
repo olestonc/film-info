@@ -32,7 +32,7 @@ public class ChapeterEntity {
 
     private int chapeterNumber;
 
-    private String name;
+    private String chapeterName;
 
     private int chapeterDuration;// mins
 

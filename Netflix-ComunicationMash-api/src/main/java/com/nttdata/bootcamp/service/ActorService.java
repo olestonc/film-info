@@ -16,7 +16,7 @@ public interface ActorService {
 
     NetflixResponse<ActorResponseDTO> updateActor(ActorResponseDTO actor);
 
-    void deleteActor(Long id);
+    NetflixResponse<ActorResponseDTO> deleteActor(Long id);
 
     NetflixResponse<ActorWithChapetersResponseDTO> getActorWithChapetersById(Long id);
 }

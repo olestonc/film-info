@@ -76,8 +76,8 @@ public class ActorController {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200")
         })
-        public void deleteActor(@RequestParam final Long id) {
-                actorService.deleteActor(id);
+        public NetflixResponse<ActorResponseDTO> deleteActor(@RequestParam final Long id) {
+                return actorService.deleteActor(id);
         }
 
         @GetMapping(value = RestConstantsUtils.RESOURCE_ACTORWITHCHAPETERS

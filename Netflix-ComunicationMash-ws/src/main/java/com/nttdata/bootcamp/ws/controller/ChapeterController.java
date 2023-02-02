@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nttdata.bootcamp.service.ChapeterService;
-import com.nttdata.bootcamp.service.responseModel.ChapeterRest;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
 import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
 import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
+import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterWithActorsResponseDTO;
 import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
 import com.nttdata.bootcamp.util.constant.RestConstantsUtils;
 
@@ -40,7 +41,7 @@ public class ChapeterController {
                         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
-        public NetflixResponse<D4iPageRest<ChapeterRest>> getAllChapeters(
+        public NetflixResponse<D4iPageRest<ChapeterResponseDTO>> getAllChapeters(
                         @RequestParam(defaultValue = CommonConstantsUtils.ZERO) final int page,
                         @RequestParam(defaultValue = CommonConstantsUtils.TWENTY) final int size,
                         @Parameter(hidden = true) final Pageable pageable) {
@@ -56,8 +57,8 @@ public class ChapeterController {
                         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
-        public NetflixResponse<ChapeterRest> getChapeterById(@RequestParam final Long id) {
-                return chapeterService.getChapeterById(id);
+        public NetflixResponse<ChapeterResponseDTO> getChapeterById(@PathVariable final Long chapeterId) {
+                return chapeterService.getChapeterById(chapeterId);
 
         }
 
@@ -80,8 +81,7 @@ public class ChapeterController {
                         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
-        public NetflixResponse<ChapeterResponseDTO> updateChapeter(@RequestBody final ChapeterResponseDTO chapeter)
-                        {
+        public NetflixResponse<ChapeterResponseDTO> updateChapeter(@RequestBody final ChapeterResponseDTO chapeter) {
                 return chapeterService.updateChapeter(chapeter);
         }
 
@@ -92,8 +92,32 @@ public class ChapeterController {
                         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
-        public void deleteChapeter(@RequestParam final Long id) {
-                chapeterService.deleteChapeter(id);
+        public NetflixResponse<ChapeterResponseDTO> deleteChapeter(@PathVariable final Long chapeterId) {
+                return chapeterService.deleteChapeter(chapeterId);
+        }
+
+        @DeleteMapping(value = RestConstantsUtils.RESOURCE_CHAPETER + RestConstantsUtils.RESOURCE_CHAPETERID
+                        + RestConstantsUtils.RESOURCE_ACTOR + RestConstantsUtils.RESOURCE_ACTORID)
+        @Operation(summary = "deleteChapeterFromSeason")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200"),
+                        @ApiResponse(responseCode = "404")
+        })
+        public NetflixResponse<ChapeterResponseDTO> deleteActorFromChapeter(@PathVariable final Long chapeterId,
+                        @PathVariable final Long actorId) {
+                return chapeterService.deleteActorFromChapeter(chapeterId, actorId);
+        }
+
+        @PostMapping(value = RestConstantsUtils.RESOURCE_CHAPETER + RestConstantsUtils.RESOURCE_CHAPETERID
+                        + RestConstantsUtils.RESOURCE_ACTOR + RestConstantsUtils.RESOURCE_ACTORID)
+        @Operation(summary = "addActorFromChapeter")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200"),
+                        @ApiResponse(responseCode = "404")
+        })
+        public NetflixResponse<ChapeterWithActorsResponseDTO> addActorFromChapeter(@PathVariable final Long chapeterId,
+                        @PathVariable final Long actorId) {
+                return chapeterService.addActorFromChapeter(chapeterId, actorId);
         }
 
 }

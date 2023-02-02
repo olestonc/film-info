@@ -3,19 +3,17 @@ package com.nttdata.bootcamp.mapper;
 import org.mapstruct.Mapper;
 
 import com.nttdata.bootcamp.persistence.entity.ChapeterEntity;
-import com.nttdata.bootcamp.service.responseModel.ChapeterRest;
 import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
-
-
+import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterWithActorsResponseDTO;
 
 @Mapper(componentModel = "spring")
 public interface ChapeterMapper {
 
-    ChapeterEntity mapToEntity(ChapeterRest rest);
+    ChapeterEntity mapResponseDTOToEntity(ChapeterResponseDTO rest);
 
-    ChapeterRest mapToRest(ChapeterEntity entity);
+    ChapeterResponseDTO mapEntityToResponseDTO(ChapeterEntity entity);
 
-    ChapeterEntity mapToEntity(ChapeterResponseDTO rest);
+    ChapeterWithActorsResponseDTO mapEntityToWithActorsResponseDTO(ChapeterEntity entity);
 
-    ChapeterResponseDTO mapToRestPost(ChapeterEntity entity);
+    ChapeterEntity mapWithActorsResponseDTOToEntity(ChapeterWithActorsResponseDTO rest);
 }

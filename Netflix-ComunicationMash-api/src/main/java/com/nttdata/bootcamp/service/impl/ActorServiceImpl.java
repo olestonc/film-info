@@ -72,11 +72,11 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     @Transactional
-    public NetflixResponse<ActorResponseDTO> createActor(ActorResponseDTO actorRest) {
-        ActorEntity actorEntity = actorMapper.mapResponseDTOToEntity(actorRest);
+    public NetflixResponse<ActorResponseDTO> createActor(ActorResponseDTO actor) {
+        ActorEntity actorEntity = actorMapper.mapResponseDTOToEntity(actor);
         actorRepository.save(actorEntity);// Donde se valida que un actor no tiene datos inválidos?
         return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
-                CommonConstantsUtils.OK, actorRest);
+                CommonConstantsUtils.OK, actor);
     }
 
     @Override
@@ -105,8 +105,10 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     @Transactional
-    public void deleteActor(Long id) {
+    public NetflixResponse<ActorResponseDTO> deleteActor(Long id) {
         actorRepository.deleteById(id);
+        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                CommonConstantsUtils.OK);
 
     }
 

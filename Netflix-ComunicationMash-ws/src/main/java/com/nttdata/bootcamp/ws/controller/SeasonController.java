@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -89,23 +89,27 @@ public class SeasonController {
                 return seasonService.deleteSeason(id);
         }
 
-        @PatchMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID + RestConstantsUtils.RESOURCE_CHAPETER +  RestConstantsUtils.RESOURCE_CHAPETERID)
+        @DeleteMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID
+                        + RestConstantsUtils.RESOURCE_CHAPETER + RestConstantsUtils.RESOURCE_CHAPETERID)
         @Operation(summary = "deleteChapeterFromSeason")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200")
+                        @ApiResponse(responseCode = "200"),
+                        @ApiResponse(responseCode = "404")
         })
-        public NetflixResponse<SeasonResponseDTO> deleteChapeterFromSeason(@RequestParam final Long seasonId,
-                        @RequestParam final Long chapeterId) {
+        public NetflixResponse<SeasonResponseDTO> deleteChapeterFromSeason(@PathVariable final Long seasonId,
+                        @PathVariable final Long chapeterId) {
                 return seasonService.deleteChapeterFromSeason(seasonId, chapeterId);
         }
 
-        @PatchMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID)
+        @PostMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID
+                        + RestConstantsUtils.RESOURCE_CHAPETER + RestConstantsUtils.RESOURCE_CHAPETERID)
         @Operation(summary = "addChapeterFromSeason")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200")
+                        @ApiResponse(responseCode = "200"),
+                        @ApiResponse(responseCode = "404")
         })
-        public NetflixResponse<SeasonWithChapetersResponseDTO> addChapeterFromSeason(@RequestParam final Long seasonId,
-                        @RequestParam final Long chapeterId) {
+        public NetflixResponse<SeasonWithChapetersResponseDTO> addChapeterFromSeason(@PathVariable final Long seasonId,
+                        @PathVariable final Long chapeterId) {
                 return seasonService.addChapeterFromSeason(seasonId, chapeterId);
         }
 }
