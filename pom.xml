@@ -53,6 +53,10 @@
         <boot.version>1.0.0-SNAPSHOT</boot.version>
         <model.version>1.0.0-SNAPSHOT</model.version>
         <ws.version>1.0.0-SNAPSHOT</ws.version>
+
+        <start-class>com.acciona.aqsw.mash.ApplicationMash</start-class>
+
+
     </properties>
 
     <dependencyManagement>
