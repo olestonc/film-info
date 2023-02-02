@@ -1,21 +1,21 @@
 package com.nttdata.bootcamp.service;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 
-import com.nttdata.bootcamp.exception.NetflixException;
 import com.nttdata.bootcamp.service.responseModel.ChapeterRest;
-import com.nttdata.bootcamp.service.responseModel.restChapeter.ChapeterRestPost;
+import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
+import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
+import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
 
 public interface ChapeterService {
-    Page<ChapeterRest> getAllChapeters(Pageable pageable) throws NetflixException;
+    NetflixResponse<D4iPageRest<ChapeterRest>> getAllChapeters(Pageable pageable);
 
-    ChapeterRest getChapeterById(Long id) throws NetflixException;
+    NetflixResponse<ChapeterRest> getChapeterById(Long id);
 
-    ChapeterRestPost createChapeter(ChapeterRestPost chapeter) throws NetflixException;
+    NetflixResponse<ChapeterResponseDTO> createChapeter(ChapeterResponseDTO chapeter);
 
-    ChapeterRestPost updateChapeter(ChapeterRestPost chapeter) throws NetflixException;
+    NetflixResponse<ChapeterResponseDTO> updateChapeter(ChapeterResponseDTO chapeter);
 
-    void deleteChapeter(Long id) throws NetflixException;
+    void deleteChapeter(Long id);
 
 }

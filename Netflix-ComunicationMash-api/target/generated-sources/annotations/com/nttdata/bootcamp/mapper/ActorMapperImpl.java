@@ -2,8 +2,8 @@ package com.nttdata.bootcamp.mapper;
 
 import com.nttdata.bootcamp.persistence.entity.ActorEntity;
 import com.nttdata.bootcamp.persistence.entity.ChapeterEntity;
-import com.nttdata.bootcamp.service.responseModel.restActor.ActorRequestDTO;
-import com.nttdata.bootcamp.service.responseModel.restActor.ActorWithChapetersRequestDTO;
+import com.nttdata.bootcamp.service.responseModel.reponseActor.ActorResponseDTO;
+import com.nttdata.bootcamp.service.responseModel.reponseActor.ActorWithChapetersResponseDTO;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.processing.Generated;
@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-02-01T16:40:34+0100",
+    date = "2023-02-02T14:21:41+0100",
     comments = "version: 1.4.0.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20221215-1352, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component
 public class ActorMapperImpl implements ActorMapper {
 
     @Override
-    public ActorEntity mapRequestDTOToEntity(ActorRequestDTO rest) {
+    public ActorEntity mapResponseDTOToEntity(ActorResponseDTO rest) {
         if ( rest == null ) {
             return null;
         }
@@ -35,24 +35,24 @@ public class ActorMapperImpl implements ActorMapper {
     }
 
     @Override
-    public ActorRequestDTO mapEntityToRequestDTO(ActorEntity entity) {
+    public ActorResponseDTO mapEntityToResponseDTO(ActorEntity entity) {
         if ( entity == null ) {
             return null;
         }
 
-        ActorRequestDTO actorRequestDTO = new ActorRequestDTO();
+        ActorResponseDTO actorResponseDTO = new ActorResponseDTO();
 
         if ( entity.getActorDescription() != null ) {
-            actorRequestDTO.setActorDescription( Double.parseDouble( entity.getActorDescription() ) );
+            actorResponseDTO.setActorDescription( Double.parseDouble( entity.getActorDescription() ) );
         }
-        actorRequestDTO.setActorId( entity.getActorId() );
-        actorRequestDTO.setActorName( entity.getActorName() );
+        actorResponseDTO.setActorId( entity.getActorId() );
+        actorResponseDTO.setActorName( entity.getActorName() );
 
-        return actorRequestDTO;
+        return actorResponseDTO;
     }
 
     @Override
-    public ActorEntity mapWithChapetersRequestDTOToEntity(ActorWithChapetersRequestDTO rest) {
+    public ActorEntity mapWithChapetersResponseDTOToEntity(ActorWithChapetersResponseDTO rest) {
         if ( rest == null ) {
             return null;
         }
@@ -73,23 +73,23 @@ public class ActorMapperImpl implements ActorMapper {
     }
 
     @Override
-    public ActorWithChapetersRequestDTO mapEntityToWithChapetersRequestDTO(ActorEntity entity) {
+    public ActorWithChapetersResponseDTO mapEntityToWithChapetersResponseDTO(ActorEntity entity) {
         if ( entity == null ) {
             return null;
         }
 
-        ActorWithChapetersRequestDTO actorWithChapetersRequestDTO = new ActorWithChapetersRequestDTO();
+        ActorWithChapetersResponseDTO actorWithChapetersResponseDTO = new ActorWithChapetersResponseDTO();
 
         Set<ChapeterEntity> set = entity.getActorChapeters();
         if ( set != null ) {
-            actorWithChapetersRequestDTO.setActorChapeters( new HashSet<ChapeterEntity>( set ) );
+            actorWithChapetersResponseDTO.setActorChapeters( new HashSet<ChapeterEntity>( set ) );
         }
         if ( entity.getActorDescription() != null ) {
-            actorWithChapetersRequestDTO.setActorDescription( Double.parseDouble( entity.getActorDescription() ) );
+            actorWithChapetersResponseDTO.setActorDescription( Double.parseDouble( entity.getActorDescription() ) );
         }
-        actorWithChapetersRequestDTO.setActorId( entity.getActorId() );
-        actorWithChapetersRequestDTO.setActorName( entity.getActorName() );
+        actorWithChapetersResponseDTO.setActorId( entity.getActorId() );
+        actorWithChapetersResponseDTO.setActorName( entity.getActorName() );
 
-        return actorWithChapetersRequestDTO;
+        return actorWithChapetersResponseDTO;
     }
 }

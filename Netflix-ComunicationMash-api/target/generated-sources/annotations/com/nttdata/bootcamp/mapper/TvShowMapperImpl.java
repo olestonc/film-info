@@ -2,16 +2,16 @@ package com.nttdata.bootcamp.mapper;
 
 import com.nttdata.bootcamp.persistence.entity.TvShowEntity;
 import com.nttdata.bootcamp.service.responseModel.TvShowRest;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestCategory;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestPost;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestSeason;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestShort;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestCategory;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestPost;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestSeason;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestShort;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-02-01T16:33:02+0100",
+    date = "2023-02-02T14:21:41+0100",
     comments = "version: 1.4.0.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20221215-1352, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component

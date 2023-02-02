@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable;
 
 
 import com.nttdata.bootcamp.exception.NetflixException;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestCategory;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestSeason;
-import com.nttdata.bootcamp.service.responseModel.restTvShow.TvShowRestShort;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestCategory;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestSeason;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestShort;
 
 public interface TvShowService {
     Page<TvShowRestShort> getAllTvShows(Pageable pageable) throws NetflixException;

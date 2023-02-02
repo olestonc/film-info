@@ -9,6 +9,16 @@
             "projectName": "netflix",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DemoApplication<Netflix-ComunicationMash-boot>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.nttdata.bootcamp.DemoApplication",
+            "projectName": "Netflix-ComunicationMash-boot",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

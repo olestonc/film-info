@@ -2,6 +2,7 @@ package com.nttdata.bootcamp.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,10 @@ import com.nttdata.bootcamp.mapper.ChapeterMapper;
 import com.nttdata.bootcamp.persistence.entity.ChapeterEntity;
 import com.nttdata.bootcamp.persistence.repository.ChapeterRepository;
 import com.nttdata.bootcamp.service.ChapeterService;
+import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
+import com.nttdata.bootcamp.service.responseModel.D4iPaginationInfo;
+import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
+import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
 import com.nttdata.bootcamp.util.constant.ExceptionConstantsUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +35,13 @@ public class ChapeterServiceImpl implements ChapeterService {
     public Page<ChapeterRest> getAllChapeters(Pageable pageable) throws NetflixException {
         Page<ChapeterEntity> page = chapeterRepository.findAll(pageable);
         return page.map(chapeterMapper::mapToRest);
+        return new NetflixResponse<>(HttpStatus.OK.toString(),
+                String.valueOf(HttpStatus.OK.value()),
+                CommonConstantsUtils.OK,
+                new D4iPageRest<>(chapeterRestList.getContent().toArray(ChapeterRest[]::new),
+                        new D4iPaginationInfo(chapeterRestList.getNumber(),
+                                pageable.getPageSize(),
+                                chapeterRestList.getTotalPages())));
     }
 
     @Override
@@ -47,18 +59,18 @@ public class ChapeterServiceImpl implements ChapeterService {
 
     @Override
     @Transactional
-    public ChapeterRestPost createChapeter(ChapeterRestPost chapeterRest) throws NetflixException {
-        ChapeterEntity chapeterEntity = chapeterMapper.mapRequestDTOToEntity(chapeterRest);
+    public ChapeterResponseDTO createChapeter(ChapeterResponseDTO chapeterRest) throws NetflixException {
+        ChapeterEntity chapeterEntity = chapeterMapper.mapResponseDTOToEntity(chapeterRest);
         chapeterRepository.save(chapeterEntity);// Donde se valida que un chapeter no tiene datos inválidos?
         return chapeterRest;
     }
 
     @Override
     @Transactional
-    public ChapeterRestPost updateChapeter(ChapeterRestPost chapeterRest) throws NetflixException {
+    public ChapeterResponseDTO updateChapeter(ChapeterResponseDTO chapeterRest) throws NetflixException {
         ChapeterEntity chapeterOld = chapeterRepository.findById(chapeterRest.getActorId()).orElseThrow(
                 () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        ChapeterEntity chapeterNew = chapeterMapper.mapRequestDTOToEntity(chapeterRest);
+        ChapeterEntity chapeterNew = chapeterMapper.mapResponseDTOToEntity(chapeterRest);
         /*
          * Esto lo hacen así en el ejemplo de Spotify, que pasaría si queremos cambiar
          * solo algunos argumentos y no todos? Que pasa si la petición POST no incluye
@@ -68,7 +80,7 @@ public class ChapeterServiceImpl implements ChapeterService {
         chapeterNew.setChapeterNumber(0);
         chapeterNew.setChapeterDuration(0);
         chapeterNew.setChapeterActors(null);
-        
+
         chapeterRepository.save(chapeterNew);
 
         return chapeterMapper.mapToRestPost(chapeterNew);

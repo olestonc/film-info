@@ -1,22 +1,20 @@
 package com.nttdata.bootcamp.service;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
-import com.nttdata.bootcamp.exception.NetflixException;
-import com.nttdata.bootcamp.service.responseModel.CategoryRest;
-import com.nttdata.bootcamp.service.responseModel.restCategory.CategoryRestPost;
+import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
+import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
+import com.nttdata.bootcamp.service.responseModel.responseCategory.CategoryResponseDTO;
 
 public interface CategoryService {
-    Page<CategoryRest> getAllCategorys(Pageable pageable) throws NetflixException;
+    NetflixResponse<D4iPageRest<CategoryResponseDTO>> getAllCategorys(Pageable pageable);
 
-    CategoryRest getCategoryById(Long id) throws NetflixException;
+    NetflixResponse<CategoryResponseDTO> getCategoryById(Long id);
 
-    CategoryRestPost createCategory(CategoryRestPost category) throws NetflixException;
+    NetflixResponse<CategoryResponseDTO> createCategory(CategoryResponseDTO category);
 
-    CategoryRestPost updateCategory(CategoryRestPost category) throws NetflixException;
+    NetflixResponse<CategoryResponseDTO> updateCategory(CategoryResponseDTO category);
 
-    void deleteCategory(Long id) throws NetflixException;
+    NetflixResponse<CategoryResponseDTO> deleteCategory(Long id);
 
 }

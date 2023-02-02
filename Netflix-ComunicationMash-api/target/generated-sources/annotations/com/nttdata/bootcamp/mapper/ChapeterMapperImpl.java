@@ -2,13 +2,13 @@ package com.nttdata.bootcamp.mapper;
 
 import com.nttdata.bootcamp.persistence.entity.ChapeterEntity;
 import com.nttdata.bootcamp.service.responseModel.ChapeterRest;
-import com.nttdata.bootcamp.service.responseModel.restChapeter.ChapeterRestPost;
+import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-02-01T16:33:02+0100",
+    date = "2023-02-02T14:21:41+0100",
     comments = "version: 1.4.0.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20221215-1352, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component
@@ -41,7 +41,7 @@ public class ChapeterMapperImpl implements ChapeterMapper {
     }
 
     @Override
-    public ChapeterEntity mapToEntity(ChapeterRestPost rest) {
+    public ChapeterEntity mapToEntity(ChapeterResponseDTO rest) {
         if ( rest == null ) {
             return null;
         }
@@ -54,15 +54,15 @@ public class ChapeterMapperImpl implements ChapeterMapper {
     }
 
     @Override
-    public ChapeterRestPost mapToRestPost(ChapeterEntity entity) {
+    public ChapeterResponseDTO mapToRestPost(ChapeterEntity entity) {
         if ( entity == null ) {
             return null;
         }
 
-        ChapeterRestPost chapeterRestPost = new ChapeterRestPost();
+        ChapeterResponseDTO chapeterResponseDTO = new ChapeterResponseDTO();
 
-        chapeterRestPost.setName( entity.getName() );
+        chapeterResponseDTO.setName( entity.getName() );
 
-        return chapeterRestPost;
+        return chapeterResponseDTO;
     }
 }

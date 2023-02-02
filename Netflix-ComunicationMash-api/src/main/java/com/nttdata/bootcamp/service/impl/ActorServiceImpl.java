@@ -20,8 +20,8 @@ import com.nttdata.bootcamp.service.ActorService;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
 import com.nttdata.bootcamp.service.responseModel.D4iPaginationInfo;
 import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
-import com.nttdata.bootcamp.service.responseModel.restActor.ActorRequestDTO;
-import com.nttdata.bootcamp.service.responseModel.restActor.ActorWithChapetersRequestDTO;
+import com.nttdata.bootcamp.service.responseModel.reponseActor.ActorResponseDTO;
+import com.nttdata.bootcamp.service.responseModel.reponseActor.ActorWithChapetersResponseDTO;
 import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
 import com.nttdata.bootcamp.util.constant.ExceptionConstantsUtils;
 
@@ -39,13 +39,13 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     @Transactional(readOnly = true)
-    public NetflixResponse<D4iPageRest<ActorRequestDTO>> getAllActors(Pageable pageable) {
+    public NetflixResponse<D4iPageRest<ActorResponseDTO>> getAllActors(Pageable pageable) {
         final Page<ActorEntity> page = actorRepository.findAll(pageable);
         return new NetflixResponse<>(HttpStatus.OK.toString(),
                 String.valueOf(HttpStatus.OK.value()),
                 CommonConstantsUtils.OK,
-                new D4iPageRest<>(page.map(actorMapper::mapEntityToRequestDTO).getContent().toArray(
-                        ActorRequestDTO[]::new),
+                new D4iPageRest<>(page.map(actorMapper::mapEntityToResponseDTO).getContent().toArray(
+                        ActorResponseDTO[]::new),
                         new D4iPaginationInfo(page.getNumber(),
                                 pageable.getPageSize(),
                                 page.getTotalPages())));
@@ -54,7 +54,7 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     @Transactional(readOnly = true)
-    public NetflixResponse<ActorRequestDTO> getActorById(Long id) {
+    public NetflixResponse<ActorResponseDTO> getActorById(Long id) {
         try {
             ActorEntity actor = actorRepository.findById(id)
                     .orElseThrow(
@@ -62,7 +62,7 @@ public class ActorServiceImpl implements ActorService {
                                     new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
 
             return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
-                    CommonConstantsUtils.OK, actorMapper.mapEntityToRequestDTO(actor));
+                    CommonConstantsUtils.OK, actorMapper.mapEntityToResponseDTO(actor));
 
         } catch (NetflixNotFoundException netflixNotFoundException) {
             return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
@@ -72,8 +72,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     @Transactional
-    public NetflixResponse<ActorRequestDTO> createActor(ActorRequestDTO actorRest) {
-        ActorEntity actorEntity = actorMapper.mapRequestDTOToEntity(actorRest);
+    public NetflixResponse<ActorResponseDTO> createActor(ActorResponseDTO actorRest) {
+        ActorEntity actorEntity = actorMapper.mapResponseDTOToEntity(actorRest);
         actorRepository.save(actorEntity);// Donde se valida que un actor no tiene datos inválidos?
         return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
                 CommonConstantsUtils.OK, actorRest);
@@ -81,12 +81,12 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     @Transactional
-    public NetflixResponse<ActorRequestDTO> updateActor(ActorRequestDTO actorRest) {
+    public NetflixResponse<ActorResponseDTO> updateActor(ActorResponseDTO actorRest) {
         try {
             ActorEntity actorOld;
             actorOld = actorRepository.findById(actorRest.getActorId()).orElseThrow(
                     () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-            ActorEntity actorNew = actorMapper.mapRequestDTOToEntity(actorRest);
+            ActorEntity actorNew = actorMapper.mapResponseDTOToEntity(actorRest);
             /*
              * Esto lo hacen así en el ejemplo de Spotify, que pasaría si queremos cambiar
              * solo algunos argumentos y no todos? Que pasa si la petición POST no incluye
@@ -96,7 +96,7 @@ public class ActorServiceImpl implements ActorService {
             actorNew.setActorDescription(actorOld.getActorDescription());
             actorRepository.save(actorNew);
             return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
-                    CommonConstantsUtils.OK, actorMapper.mapEntityToRequestDTO(actorNew));
+                    CommonConstantsUtils.OK, actorMapper.mapEntityToResponseDTO(actorNew));
         } catch (NetflixNotFoundException e) {
             return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
                     ExceptionConstantsUtils.NOT_FOUND_GENERIC);
@@ -111,12 +111,12 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public NetflixResponse<ActorWithChapetersRequestDTO> getActorWithChapetersById(Long id) {
+    public NetflixResponse<ActorWithChapetersResponseDTO> getActorWithChapetersById(Long id) {
         try {
             ActorEntity actor = actorRepository.findById(id).orElseThrow(
                     () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
 
-            ActorWithChapetersRequestDTO responseActor = actorMapper.mapEntityToWithChapetersRequestDTO(actor);
+            ActorWithChapetersResponseDTO responseActor = actorMapper.mapEntityToWithChapetersResponseDTO(actor);
 
             Set<TvShowEntity> tvShows = new HashSet<>();
 

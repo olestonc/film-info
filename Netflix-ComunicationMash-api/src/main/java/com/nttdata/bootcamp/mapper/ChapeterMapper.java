@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 
 import com.nttdata.bootcamp.persistence.entity.ChapeterEntity;
 import com.nttdata.bootcamp.service.responseModel.ChapeterRest;
-import com.nttdata.bootcamp.service.responseModel.restChapeter.ChapeterRestPost;
+import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
 
 
 
@@ -15,7 +15,7 @@ public interface ChapeterMapper {
 
     ChapeterRest mapToRest(ChapeterEntity entity);
 
-    ChapeterEntity mapToEntity(ChapeterRestPost rest);
+    ChapeterEntity mapToEntity(ChapeterResponseDTO rest);
 
-    ChapeterRestPost mapToRestPost(ChapeterEntity entity);
+    ChapeterResponseDTO mapToRestPost(ChapeterEntity entity);
 }

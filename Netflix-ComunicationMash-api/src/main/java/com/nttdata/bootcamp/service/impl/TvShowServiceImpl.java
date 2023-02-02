@@ -63,7 +63,7 @@ public class TvShowServiceImpl implements TvShowService {
     @Override
     @Transactional
     public TvShowRestShort createTvShow(TvShowRestShort tvshowRest) throws NetflixException {
-        TvShowEntity tvshowEntity = tvShowMapper.mapRequestDTOToEntity(tvshowRest);
+        TvShowEntity tvshowEntity = tvShowMapper.mapResponseDTOToEntity(tvshowRest);
         tvShowRepository.save(tvshowEntity);// Donde se valida que un tvshow no tiene datos inválidos?
         return tvshowRest;
     }
@@ -73,7 +73,7 @@ public class TvShowServiceImpl implements TvShowService {
     public TvShowRestShort updateTvShow(TvShowRestShort tvshowRest) throws NetflixException {
         TvShowEntity tvshowOld = tvShowRepository.findById(tvshowRest.getActorId()).orElseThrow(
                 () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        TvShowEntity tvshowNew = tvShowMapper.mapRequestDTOToEntity(tvshowRest);
+        TvShowEntity tvshowNew = tvShowMapper.mapResponseDTOToEntity(tvshowRest);
         /*
          * Esto lo hacen así en el ejemplo de Spotify, que pasaría si queremos cambiar
          * solo algunos argumentos y no todos? Que pasa si la petición POST no incluye
