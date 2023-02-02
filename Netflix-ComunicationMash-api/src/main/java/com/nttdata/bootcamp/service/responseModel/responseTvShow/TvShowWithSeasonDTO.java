@@ -13,14 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TvShowRestCategory implements Serializable {
-
-    @JsonProperty("id")
-    private Long id;
-
-    @JsonProperty("categoryName")//Corregir nombres, 2 entidades como mapean nombre iguales?
-    private String categoryName;
-
+public class TvShowWithSeasonDTO implements Serializable
+ {
+    @JsonProperty("tvShowId")
+    private Long tvShowId;
+   
     @JsonProperty("tvShowName")
     private String tvShowName;
+
+    @JsonProperty("seasonNumber")
+    private String seasonNumber;
+
+    @JsonProperty("seasonName")
+    private String seasonName;
+
 }

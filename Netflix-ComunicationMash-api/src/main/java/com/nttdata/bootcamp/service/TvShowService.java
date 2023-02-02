@@ -1,31 +1,31 @@
 package com.nttdata.bootcamp.service;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-
-import com.nttdata.bootcamp.exception.NetflixException;
-import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestCategory;
-import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestSeason;
-import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowRestShort;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithCategoryDTO;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithSeasonDTO;
+import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
+import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowResponseDTO;
 
 public interface TvShowService {
-    Page<TvShowRestShort> getAllTvShows(Pageable pageable) throws NetflixException;
 
-    TvShowRestShort getTvShowById(Long id) throws NetflixException;
+    NetflixResponse<D4iPageRest<TvShowResponseDTO>> getAllTvShows(Pageable pageable);
 
-    TvShowRestShort createTvShow(TvShowRestShort tvshow) throws NetflixException;
+    NetflixResponse<TvShowResponseDTO> getTvShowById(Long id);
 
-    TvShowRestShort updateTvShow(TvShowRestShort tvshow) throws NetflixException;
+    NetflixResponse<TvShowResponseDTO> createTvShow(TvShowResponseDTO tvshow);
 
-    TvShowRestSeason addSeasonOfTvShow(Long tvshowId, Long seasonId)  throws NetflixException;
+    NetflixResponse<TvShowResponseDTO> updateTvShow(TvShowResponseDTO tvshow);
 
-    TvShowRestCategory addCategoryOfTvShow(Long tvshowId, Long categoryId) throws NetflixException;
-    
-    void deleteTvShow(Long id) throws NetflixException;
+    NetflixResponse<TvShowResponseDTO> deleteTvShow(Long id);
 
-    void deleteSeasonOfTvShow(Long tvshowId, Long seasonId) throws NetflixException;
+    NetflixResponse<TvShowWithSeasonDTO> addSeasonOfTvShow(Long tvshowId, Long seasonId);
 
-    void deleteCategoryOfTvShow(Long tvshowId) throws NetflixException;
+    NetflixResponse<TvShowResponseDTO> deleteSeasonOfTvShow(Long tvshowId, Long seasonId);
+
+    NetflixResponse<TvShowWithCategoryDTO> setCategoryOfTvShow(Long tvshowId, Long categoryId);
+
+    NetflixResponse<TvShowResponseDTO> deleteCategoryFromTvShow(Long tvshowId);
 
 }

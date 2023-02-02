@@ -1,18 +1,11 @@
 package com.nttdata.bootcamp.service.impl;
 
-import java.util.Optional;
-import java.util.Set;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nttdata.bootcamp.controller.rest.model.restTvShow.TvShowRestCategory;
-import com.nttdata.bootcamp.controller.rest.model.restTvShow.TvShowRestSeason;
-import com.nttdata.bootcamp.controller.rest.model.restTvShow.TvShowRestShort;
-import com.nttdata.bootcamp.exception.NetflixException;
 import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.exception.error.ErrorDto;
 import com.nttdata.bootcamp.mapper.TvShowMapper;
@@ -23,6 +16,13 @@ import com.nttdata.bootcamp.persistence.repository.CategoryRepository;
 import com.nttdata.bootcamp.persistence.repository.SeasonRepository;
 import com.nttdata.bootcamp.persistence.repository.TvShowRepository;
 import com.nttdata.bootcamp.service.TvShowService;
+import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
+import com.nttdata.bootcamp.service.responseModel.D4iPaginationInfo;
+import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowResponseDTO;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithCategoryDTO;
+import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithSeasonDTO;
+import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
 import com.nttdata.bootcamp.util.constant.ExceptionConstantsUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -35,117 +35,162 @@ public class TvShowServiceImpl implements TvShowService {
 
     private final TvShowMapper tvShowMapper;
 
-    // private CrudRepository<TvShowEntity, Long> seasonRepository;
     private SeasonRepository seasonRepository;
 
     private CategoryRepository categoryRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public Page<TvShowRestShort> getAllTvShows(Pageable pageable) throws NetflixException {
-        Page<TvShowEntity> page = tvShowRepository.findAll(pageable);
-        return page.map(tvShowMapper::mapToRestShort);
+    public NetflixResponse<D4iPageRest<TvShowResponseDTO>> getAllTvShows(Pageable pageable) {
+        final Page<TvShowEntity> page = tvShowRepository.findAll(pageable);
+        return new NetflixResponse<>(HttpStatus.OK.toString(),
+                String.valueOf(HttpStatus.OK.value()),
+                CommonConstantsUtils.OK,
+                new D4iPageRest<>(page.map(tvShowMapper::mapEntityToResponseDTO).getContent().toArray(
+                        TvShowResponseDTO[]::new),
+                        new D4iPaginationInfo(page.getNumber(),
+                                pageable.getPageSize(),
+                                page.getTotalPages())));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public TvShowRestShort getTvShowById(Long id) throws NetflixException {
-        /*
-         * Equivale a usar la clase optional para recibir de repositorio y
-         * if(optional.get()==null) then throws Not Found
-         */
-        TvShowEntity tvshow = tvShowRepository.findById(id)
-                .orElseThrow(
-                        () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        return tvShowMapper.mapToRestShort(tvshow);
+    public NetflixResponse<TvShowResponseDTO> getTvShowById(Long id) {
+        try {
+            TvShowEntity tvShow = tvShowRepository.findById(id)
+                    .orElseThrow(
+                            () -> new NetflixNotFoundException(
+                                    new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+
+            return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                    CommonConstantsUtils.OK, tvShowMapper.mapEntityToResponseDTO(tvShow));
+
+        } catch (NetflixNotFoundException netflixNotFoundException) {
+            return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
+                    ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+        }
     }
 
     @Override
     @Transactional
-    public TvShowRestShort createTvShow(TvShowRestShort tvshowRest) throws NetflixException {
-        TvShowEntity tvshowEntity = tvShowMapper.mapEntityToWithActorsResponseDTO(tvshowRest);
-        tvShowRepository.save(tvshowEntity);// Donde se valida que un tvshow no tiene datos inválidos?
-        return tvshowRest;
+    public NetflixResponse<TvShowResponseDTO> createTvShow(TvShowResponseDTO tvShow) {
+        TvShowEntity tvShowEntity = tvShowMapper.mapResponseDTOToEntity(tvShow);
+        tvShowRepository.save(tvShowEntity);// Donde se valida que un tvShow no tiene datos inválidos?
+        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                CommonConstantsUtils.OK, tvShow);
     }
 
     @Override
     @Transactional
-    public TvShowRestShort updateTvShow(TvShowRestShort tvshowRest) throws NetflixException {
-        TvShowEntity tvshowOld = tvShowRepository.findById(tvshowRest.getActorId()).orElseThrow(
-                () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        TvShowEntity tvshowNew = tvShowMapper.mapEntityToWithActorsResponseDTO(tvshowRest);
-        /*
-         * Esto lo hacen así en el ejemplo de Spotify, que pasaría si queremos cambiar
-         * solo algunos argumentos y no todos? Que pasa si la petición POST no incluye
-         * todos los parámetros porque no quiere editarlos todos?
-         */
-        tvshowNew.setTvShowName(tvshowOld.getTvShowName());
-        tvshowNew.setTvShowShortDescription(tvshowOld.getTvShowShortDescription());
-        tvshowNew.setTvShowLongDescription(tvshowOld.getTvShowLongDescription());
-        tvshowNew.setTvShowYear(tvshowOld.getTvShowYear());
-        tvshowNew.setTvShowRecommendedAge(tvshowOld.getTvShowRecommendedAge());
-        tvshowNew.setTvShowAdvertising(tvshowOld.isTvShowAdvertising());
-        tvShowRepository.save(tvshowNew);
-
-        return tvShowMapper.mapToRestShort(tvshowNew);
+    public NetflixResponse<TvShowResponseDTO> updateTvShow(TvShowResponseDTO tvShow) {
+        try {
+            TvShowEntity tvShowOld = tvShowRepository.findById(tvShow.getTvShowId()).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+            TvShowEntity tvShowNew = tvShowMapper.mapResponseDTOToEntity(tvShow);
+            /*
+             * Esto lo hacen así en el ejemplo de Spotify, que pasaría si queremos cambiar
+             * solo algunos argumentos y no todos? Que pasa si la petición POST no incluye
+             * todos los parámetros porque no quiere editarlos todos?
+             */
+            tvShowNew.setTvShowName(tvShowOld.getTvShowName());
+            tvShowNew.setTvShowShortDescription(tvShowOld.getTvShowShortDescription());
+            tvShowNew.setTvShowLongDescription(tvShowOld.getTvShowLongDescription());
+            tvShowNew.setTvShowYear(tvShowOld.getTvShowYear());
+            tvShowNew.setTvShowRecommendedAge(tvShowOld.getTvShowRecommendedAge());
+            tvShowNew.setTvShowAdvertising(tvShowOld.isTvShowAdvertising());
+            tvShowRepository.save(tvShowNew);
+            return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                    CommonConstantsUtils.OK, tvShowMapper.mapEntityToResponseDTO(tvShowNew));
+        } catch (NetflixNotFoundException e) {
+            return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
+                    ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+        }
     }
 
     @Override
     @Transactional
-    public void deleteTvShow(Long id) throws NetflixException {
+    public NetflixResponse<TvShowResponseDTO> deleteTvShow(Long id) {
         tvShowRepository.deleteById(id);
-
+        return new NetflixResponse<>(HttpStatus.OK.toString(),
+                String.valueOf(HttpStatus.OK.value()), CommonConstantsUtils.OK);
     }
 
     @Override
     @Transactional
-    public TvShowRestSeason addSeasonOfTvShow(Long tvshowId, Long seasonId) throws NetflixException {
-        TvShowEntity tvShowEntity = tvShowRepository.findById(
-                tvshowId).orElseThrow(
-                        () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        Set<SeasonEntity> tvShowEntitySeasons = tvShowEntity.getTvShowSeasons();
-        SeasonEntity seasonEntity = seasonRepository.findById(
-                seasonId).orElseThrow(
-                        () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        tvShowEntitySeasons.add(seasonEntity);
-        tvShowEntity.setTvShowSeasons(tvShowEntitySeasons);
-        tvShowRepository.save(tvShowEntity);
-        return tvShowMapper.mapToRestSeason(tvShowEntity);
+    public NetflixResponse<TvShowWithSeasonDTO> addSeasonOfTvShow(Long tvShowId, Long seasonId) {
+        try {
+            TvShowEntity tvshow = tvShowRepository.findById(tvShowId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+            SeasonEntity seasonToAdd = seasonRepository.findById(seasonId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
 
+            tvshow.getTvShowSeasons().add(seasonToAdd);
+            tvShowRepository.save(tvshow);
+
+            return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                    CommonConstantsUtils.OK, tvShowMapper.mapEntityToResponseDTOWithSeason(tvshow));
+        } catch (NetflixNotFoundException e) {
+            return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
+                    ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+        }
     }
 
     @Override
     @Transactional
-    public TvShowRestCategory addCategoryOfTvShow(Long tvshowId, Long categoryId) throws NetflixException {
-        TvShowEntity tvShowEntity = tvShowRepository.findById(tvshowId).orElseThrow(
-                () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        CategoryEntity categoryEntity = categoryRepository.findById(categoryId).orElseThrow(
-                () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+    public NetflixResponse<TvShowResponseDTO> deleteSeasonOfTvShow(Long tvShowId, Long seasonId) {
+        try {
+            TvShowEntity tvshow = tvShowRepository.findById(tvShowId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+            SeasonEntity seasonToRemove = seasonRepository.findById(seasonId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
 
-        tvShowEntity.setTvShowCategory(categoryEntity);
-        tvShowRepository.save(tvShowEntity);
-        return tvShowMapper.mapToRestCategory(tvShowEntity);
+            tvshow.getTvShowSeasons().remove(seasonToRemove);
+            tvShowRepository.save(tvshow);
+
+            return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                    CommonConstantsUtils.OK);
+        } catch (NetflixNotFoundException e) {
+            return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
+                    ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+        }
     }
 
     @Override
     @Transactional
-    public void deleteSeasonOfTvShow(Long tvshowId, Long seasonId) throws NetflixException {
-        TvShowEntity tvShowEntity = tvShowRepository.findById(tvshowId).orElseThrow(
-                () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        SeasonEntity seasonEntity = seasonRepository.findById(seasonId).orElseThrow(
-                () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        tvShowEntity.getTvShowSeasons().remove(seasonEntity);
-        tvShowRepository.save(tvShowEntity);
+    public NetflixResponse<TvShowWithCategoryDTO> setCategoryOfTvShow(Long tvShowId, Long categoryId) {
+        try {
+            TvShowEntity tvshow = tvShowRepository.findById(tvShowId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+            CategoryEntity categoryToSet = categoryRepository.findById(categoryId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
+
+            tvshow.setTvShowCategory(categoryToSet);
+            tvShowRepository.save(tvshow);
+
+            return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                    CommonConstantsUtils.OK, tvShowMapper.mapEntityToResponseDTOWithCategory(tvshow));
+        } catch (NetflixNotFoundException e) {
+            return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
+                    ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+        }
     }
 
     @Override
     @Transactional
-    public void deleteCategoryOfTvShow(Long tvshowId) throws NetflixException {
-        TvShowEntity tvShowEntity = tvShowRepository.findById(tvshowId).orElseThrow(
-                () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
-        tvShowEntity.setTvShowCategory(null);
-        tvShowRepository.save(tvShowEntity);
+    public NetflixResponse<TvShowResponseDTO> deleteCategoryFromTvShow(Long tvShowId) {
+        try {
+            TvShowEntity tvshow = tvShowRepository.findById(tvShowId).orElseThrow(
+                    () -> new NetflixNotFoundException(new ErrorDto(ExceptionConstantsUtils.NOT_FOUND_GENERIC)));
 
+            tvshow.setTvShowCategory(null);
+            tvShowRepository.save(tvshow);
+
+            return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                    CommonConstantsUtils.OK);
+        } catch (NetflixNotFoundException e) {
+            return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(), String.valueOf(HttpStatus.NOT_FOUND.value()),
+                    ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+        }
     }
 
 }

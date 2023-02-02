@@ -13,20 +13,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TvShowRestSeason implements Serializable
- {
+public class TvShowWithCategoryDTO implements Serializable {
 
-    // id, number and name of the season and the tv show
-    
-    @JsonProperty("id")
-    private Long id;
+    @JsonProperty("tvShowId")
+    private Long tvShowId;
 
-    @JsonProperty("seasonNumber")
-    private String seasonNumber;
+    @JsonProperty("categoryName")
+    private String categoryName;
 
-    @JsonProperty("seasonName")
-    private String seasonName;
-
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("tvShowName")
+    private String tvShowName;
 }
