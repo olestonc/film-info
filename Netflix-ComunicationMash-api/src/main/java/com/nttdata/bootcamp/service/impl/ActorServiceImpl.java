@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.service.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class ActorServiceImpl implements ActorService {
 
     private final SeasonRepository seasonRepository;
 
+    @Value("${com.nttdata.bootcamp.mapper.ActorMapper}")
     private final ActorMapper actorMapper;
 
     @Override

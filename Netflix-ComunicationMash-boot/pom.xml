@@ -43,6 +43,12 @@
             <version>${model.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.nttdata.bootcamp</groupId>
+            <artifactId>Netflix-ComunicationMash-api</artifactId>
+            <version>${api.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- Management Database Libraries -->
         <!-- <dependency>
