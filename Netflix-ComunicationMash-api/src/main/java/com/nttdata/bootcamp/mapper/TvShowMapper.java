@@ -1,13 +1,15 @@
 package com.nttdata.bootcamp.mapper;
 
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
 import com.nttdata.bootcamp.persistence.entity.TvShowEntity;
 import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithCategoryDTO;
 import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithSeasonDTO;
 
-@Mapper(componentModel = "spring")
+@Component
+@Mapper
 public interface TvShowMapper {
 
     TvShowResponseDTO mapEntityToResponseDTO(TvShowEntity entity);

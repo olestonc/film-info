@@ -34,7 +34,7 @@ public class ActorEntity {
 
     private String actorDescription;
 
-    @ManyToMany(mappedBy = "actors", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
             CascadeType.MERGE })
     private Set<ChapeterEntity> actorChapeters;
 

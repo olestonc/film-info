@@ -34,7 +34,7 @@ public class CategoryEntity implements Serializable {
     @Column(unique = true)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tvShowCategory", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private Set<TvShowEntity> categoryTvShows;
 
 }

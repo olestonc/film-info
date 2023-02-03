@@ -32,7 +32,7 @@ public class ActorWithChapetersResponseDTO implements Serializable {// Otro nomb
     @JsonProperty("actorChapeters")
     private Set<ChapeterEntity> actorChapeters;
 
-    @JsonProperty("actorDescription")
+    @JsonProperty("actorTvShows")
     private Set<TvShowEntity> actorTvShows;
 
 }

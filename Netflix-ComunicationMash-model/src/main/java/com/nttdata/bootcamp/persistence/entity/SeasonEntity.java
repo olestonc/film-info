@@ -39,7 +39,7 @@ public class SeasonEntity implements Serializable {
     @Column(length = 65555)
     private String seasonLongDescription;// Algún tipo de dato más apropiado?
 
-    @OneToMany(mappedBy = "season", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chapeterSeason", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<ChapeterEntity> seasonChapeters;
 
     @ManyToOne(fetch = FetchType.LAZY)

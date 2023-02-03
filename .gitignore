@@ -1,0 +1,4 @@
+
+*.class
+Netflix-ComunicationMash-api/target/classes/META-INF/spring-configuration-metadata.json
+Netflix-ComunicationMash-boot/target/classes/application.properties

@@ -36,7 +36,7 @@ public class ChapeterEntity {
 
     private int chapeterDuration;// mins
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
             CascadeType.MERGE })
     private Set<ActorEntity> chapeterActors;
 

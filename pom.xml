@@ -35,8 +35,7 @@
             1.4.0.Final</mapStruct.version>
         <spring.cloud.version>1.4.7.RELEASE</spring.cloud.version>
         <commons.math3.version>3.6.1</commons.math3.version>
-        <mockito.all.version>
-            1.10.19</mockito.all.version>
+        
         <springdoc.openapi.version>1.5.0</springdoc.openapi.version>
 
         <sonar.cpd.exclusions>**/test/java/**/*</sonar.cpd.exclusions>
@@ -136,12 +135,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
-        <!-- Feign Cloud -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
-            <version>${spring.cloud.version}</version>
-        </dependency>
+       
         <!--  MySQL Database Connection -->
         <dependency>
             <groupId>mysql</groupId>
@@ -149,39 +143,15 @@
             <scope>runtime</scope>
             <version>8.0.32</version>
         </dependency>
-        <!--  Postgresql Database Connection -->
-        <!-- <dependency>
-            <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency> -->
-
-        <!-- h2 Database Connection -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.1.214</version>
-            <!--			<scope>test</scope>-->
-        </dependency>
+  
+        
         <!-- MapStruct -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapStruct.version}</version>
         </dependency>
-        <!-- JackSon -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-        </dependency>
+        
         <!-- Apache Lang & Math -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -192,13 +162,9 @@
             <artifactId>commons-math3</artifactId>
             <version>${commons.math3.version}</version>
         </dependency>
-        <!-- Mockito -->
+      
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+       
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
@@ -208,74 +174,7 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.3</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            **/controller/mapper/RestMapper.java</exclude>
-                        <exclude>**/config/**/*</exclude>
-                        <exclude>
-                            **/controller/rest/model/**</exclude>
-                        <exclude>**/service/model/**</exclude>
-                        <exclude>
-                            **/persistence/entity/**</exclude>
-                        <exclude>**/exception/**/*</exclude>
-                        <exclude>
-                            **/util/**/*</exclude>
-                        <exclude>**/NetflixApplication*</exclude>
-                        <exclude>**/feign/**/*</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>jacoco-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>
-                        11</source>
-                    <target>11</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>
-                                ${mapStruct.version}</version>
-                        </path>
-                        <path>
-                            <groupId>
-                                org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
     <pluginRepositories>
         <pluginRepository>
             <id>repository.spring.release</id>
