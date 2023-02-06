@@ -25,14 +25,17 @@
 
     <properties>
         <mapstruct.version>1.4.0.Final</mapstruct.version>
-        <java.version>11</java.version>
+        <java.version>
+            11</java.version>
         <lombok.version>1.18.12</lombok.version>
         <commons.math3.version>3.6.1</commons.math3.version>
         <springdoc.openapi.version>1.5.0</springdoc.openapi.version>
-        <api.version>1.0.0-SNAPSHOT</api.version>
+        <api.version>
+            1.0.0-SNAPSHOT</api.version>
         <boot.version>1.0.0-SNAPSHOT</boot.version>
         <model.version>1.0.0-SNAPSHOT</model.version>
-        <ws.version>1.0.0-SNAPSHOT</ws.version>
+        <ws.version>
+            1.0.0-SNAPSHOT</ws.version>
     </properties>
 
     <dependencyManagement>
@@ -158,4 +161,28 @@
             <url>https://repo.spring.io/plugins-release/</url>
         </pluginRepository>
     </pluginRepositories>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapStruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,14 +1,13 @@
 package com.nttdata.bootcamp.mapper;
 
 import org.mapstruct.Mapper;
-import org.springframework.stereotype.Component;
+
 
 import com.nttdata.bootcamp.persistence.entity.ChapeterEntity;
 import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterWithActorsResponseDTO;
 
-@Component
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ChapeterMapper {
 
     ChapeterEntity mapResponseDTOToEntity(ChapeterResponseDTO rest);

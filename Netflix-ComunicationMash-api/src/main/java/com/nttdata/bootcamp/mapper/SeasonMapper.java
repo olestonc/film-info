@@ -1,14 +1,13 @@
 package com.nttdata.bootcamp.mapper;
 
 import org.mapstruct.Mapper;
-import org.springframework.stereotype.Component;
+
 
 import com.nttdata.bootcamp.persistence.entity.SeasonEntity;
 import com.nttdata.bootcamp.service.responseModel.responseSeason.SeasonResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.responseSeason.SeasonWithChapetersResponseDTO;
 
-@Component
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SeasonMapper {
 
     SeasonEntity mapResponseDTOToEntity(SeasonResponseDTO rest);
