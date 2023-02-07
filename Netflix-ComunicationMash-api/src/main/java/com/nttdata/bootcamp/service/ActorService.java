@@ -2,21 +2,21 @@ package com.nttdata.bootcamp.service;
 
 import org.springframework.data.domain.Pageable;
 
+import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
-import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
 import com.nttdata.bootcamp.service.responseModel.reponseActor.ActorResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.reponseActor.ActorWithChapetersResponseDTO;
 
 public interface ActorService {
-    NetflixResponse<D4iPageRest<ActorResponseDTO>> getAllActors(Pageable pageable);
+    D4iPageRest<ActorResponseDTO> getAllActors(Pageable pageable);
 
-    NetflixResponse<ActorResponseDTO> getActorById(Long id);
+    ActorResponseDTO getActorById(Long id) throws NetflixNotFoundException;
 
-    NetflixResponse<ActorResponseDTO> createActor(ActorResponseDTO actor);
+    ActorResponseDTO createActor(ActorResponseDTO actor);
 
-    NetflixResponse<ActorResponseDTO> updateActor(ActorResponseDTO actor);
+    ActorResponseDTO updateActor(ActorResponseDTO actor) throws NetflixNotFoundException;
 
-    NetflixResponse<ActorResponseDTO> deleteActor(Long id);
+    void deleteActor(Long id);
 
-    NetflixResponse<ActorWithChapetersResponseDTO> getActorWithChapetersById(Long id);
+    ActorWithChapetersResponseDTO getActorWithChapetersById(Long id) throws NetflixNotFoundException;
 }

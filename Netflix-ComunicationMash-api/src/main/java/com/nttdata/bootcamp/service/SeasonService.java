@@ -2,24 +2,24 @@ package com.nttdata.bootcamp.service;
 
 import org.springframework.data.domain.Pageable;
 
+import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
-import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
 import com.nttdata.bootcamp.service.responseModel.responseSeason.SeasonResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.responseSeason.SeasonWithChapetersResponseDTO;
 
 public interface SeasonService {
-    NetflixResponse<D4iPageRest<SeasonResponseDTO>> getAllSeasons(Pageable pageable);
+    D4iPageRest<SeasonResponseDTO> getAllSeasons(Pageable pageable);
 
-    NetflixResponse<SeasonResponseDTO> getSeasonById(Long id);
+    SeasonResponseDTO getSeasonById(Long id) throws NetflixNotFoundException;
 
-    NetflixResponse<SeasonResponseDTO> createSeason(SeasonResponseDTO season);
+    void createSeason(SeasonResponseDTO season);
 
-    NetflixResponse<SeasonResponseDTO> updateSeason(SeasonResponseDTO season);
+    SeasonResponseDTO updateSeason(SeasonResponseDTO season) throws NetflixNotFoundException;
 
-    NetflixResponse<SeasonResponseDTO> deleteSeason(Long id);
+    void deleteSeason(Long id);
 
-    NetflixResponse<SeasonResponseDTO> deleteChapeterFromSeason(Long seasonId, Long chapeterId);
+    void deleteChapeterFromSeason(Long seasonId, Long chapeterId) throws NetflixNotFoundException;
 
-    NetflixResponse<SeasonWithChapetersResponseDTO> addChapeterFromSeason(Long seasonId, Long chapeterId);
+    SeasonWithChapetersResponseDTO addChapeterFromSeason(Long seasonId, Long chapeterId) throws NetflixNotFoundException;
 
 }

@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.ws.controller;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.service.SeasonService;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
 import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
 import com.nttdata.bootcamp.service.responseModel.responseSeason.SeasonResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.responseSeason.SeasonWithChapetersResponseDTO;
 import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
+import com.nttdata.bootcamp.util.constant.ExceptionConstantsUtils;
 import com.nttdata.bootcamp.util.constant.RestConstantsUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +47,8 @@ public class SeasonController {
                         @RequestParam(defaultValue = CommonConstantsUtils.TWENTY) final int size,
                         @Parameter(hidden = true) final Pageable pageable) {
 
-                return seasonService.getAllSeasons(pageable);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK, seasonService.getAllSeasons(pageable));
         }
 
         @GetMapping(value = RestConstantsUtils.RESOURCE_SEASON
@@ -54,7 +58,14 @@ public class SeasonController {
                         @ApiResponse(responseCode = "200"),
         })
         public NetflixResponse<SeasonResponseDTO> getSeasonById(@RequestParam final Long id) {
-                return seasonService.getSeasonById(id);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, seasonService.getSeasonById(id));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 
         @PostMapping(value = RestConstantsUtils.RESOURCE_SEASON, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,8 +76,9 @@ public class SeasonController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<SeasonResponseDTO> createSeason(@RequestBody final SeasonResponseDTO season) {
-                return seasonService.createSeason(season);
-
+                seasonService.createSeason(season);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK);
         }
 
         @PutMapping(value = RestConstantsUtils.RESOURCE_SEASON)
@@ -77,7 +89,14 @@ public class SeasonController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<SeasonResponseDTO> updateSeason(@RequestBody final SeasonResponseDTO season) {
-                return seasonService.updateSeason(season);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, seasonService.updateSeason(season));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 
         @DeleteMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID)
@@ -86,7 +105,9 @@ public class SeasonController {
                         @ApiResponse(responseCode = "200")
         })
         public NetflixResponse<SeasonResponseDTO> deleteSeason(@RequestParam final Long id) {
-                return seasonService.deleteSeason(id);
+                seasonService.deleteSeason(id);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK);
         }
 
         @DeleteMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID
@@ -98,7 +119,15 @@ public class SeasonController {
         })
         public NetflixResponse<SeasonResponseDTO> deleteChapeterFromSeason(@PathVariable final Long seasonId,
                         @PathVariable final Long chapeterId) {
-                return seasonService.deleteChapeterFromSeason(seasonId, chapeterId);
+                try {
+                        seasonService.deleteChapeterFromSeason(seasonId, chapeterId);
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK);
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 
         @PostMapping(value = RestConstantsUtils.RESOURCE_SEASON + RestConstantsUtils.RESOURCE_SEASONID
@@ -110,6 +139,15 @@ public class SeasonController {
         })
         public NetflixResponse<SeasonWithChapetersResponseDTO> addChapeterFromSeason(@PathVariable final Long seasonId,
                         @PathVariable final Long chapeterId) {
-                return seasonService.addChapeterFromSeason(seasonId, chapeterId);
+
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK,
+                                        seasonService.addChapeterFromSeason(seasonId, chapeterId));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 }

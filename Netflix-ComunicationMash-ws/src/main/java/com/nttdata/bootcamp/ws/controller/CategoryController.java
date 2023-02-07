@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.ws.controller;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.service.CategoryService;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
 import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
 import com.nttdata.bootcamp.service.responseModel.responseCategory.CategoryResponseDTO;
 import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
+import com.nttdata.bootcamp.util.constant.ExceptionConstantsUtils;
 import com.nttdata.bootcamp.util.constant.RestConstantsUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,8 +46,8 @@ public class CategoryController {
                         @RequestParam(defaultValue = CommonConstantsUtils.ZERO) final int page,
                         @RequestParam(defaultValue = CommonConstantsUtils.TWENTY) final int size,
                         @Parameter(hidden = true) final Pageable pageable) {
-
-                return categoryService.getAllCategorys(pageable);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK, categoryService.getAllCategorys(pageable));
         }
 
         @GetMapping(value = RestConstantsUtils.RESOURCE_CATEGORY
@@ -56,7 +59,14 @@ public class CategoryController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<CategoryResponseDTO> getCategoryById(@RequestParam final Long id) {
-                return categoryService.getCategoryById(id);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, categoryService.getCategoryById(id));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
 
         }
 
@@ -68,7 +78,8 @@ public class CategoryController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<CategoryResponseDTO> createCategory(@RequestBody final CategoryResponseDTO category) {
-                return categoryService.createCategory(category);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK, categoryService.createCategory(category));
 
         }
 
@@ -80,7 +91,14 @@ public class CategoryController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<CategoryResponseDTO> updateCategory(@RequestBody final CategoryResponseDTO category) {
-                return categoryService.updateCategory(category);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, categoryService.updateCategory(category));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 
         @DeleteMapping(value = RestConstantsUtils.RESOURCE_CATEGORY + RestConstantsUtils.RESOURCE_CATEGORYID)
@@ -91,6 +109,8 @@ public class CategoryController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<CategoryResponseDTO> deleteCategory(@RequestParam final Long id) {
-                return categoryService.deleteCategory(id);
+                categoryService.deleteCategory(id);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK);
         }
 }
