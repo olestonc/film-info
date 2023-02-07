@@ -2,24 +2,24 @@ package com.nttdata.bootcamp.service;
 
 import org.springframework.data.domain.Pageable;
 
+import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
-import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
 import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterResponseDTO;
 import com.nttdata.bootcamp.service.responseModel.responseChapeter.ChapeterWithActorsResponseDTO;
 
 public interface ChapeterService {
-    NetflixResponse<D4iPageRest<ChapeterResponseDTO>> getAllChapeters(Pageable pageable);
+    D4iPageRest<ChapeterResponseDTO> getAllChapeters(Pageable pageable);
 
-    NetflixResponse<ChapeterResponseDTO> getChapeterById(Long id);
+    ChapeterResponseDTO getChapeterById(Long id) throws NetflixNotFoundException;
 
-    NetflixResponse<ChapeterResponseDTO> createChapeter(ChapeterResponseDTO chapeter);
+    ChapeterResponseDTO createChapeter(ChapeterResponseDTO chapeter);
 
-    NetflixResponse<ChapeterResponseDTO> updateChapeter(ChapeterResponseDTO chapeter);
+    ChapeterResponseDTO updateChapeter(ChapeterResponseDTO chapeter) throws NetflixNotFoundException;
 
-    NetflixResponse<ChapeterResponseDTO> deleteChapeter(Long id);
+    void deleteChapeter(Long id);
 
-    NetflixResponse<ChapeterResponseDTO> deleteActorFromChapeter(Long chapeterId, Long actorId);
+    void deleteActorFromChapeter(Long chapeterId, Long actorId) throws NetflixNotFoundException;
 
-    NetflixResponse<ChapeterWithActorsResponseDTO> addActorFromChapeter(Long chapeterId, Long actorId);
+    ChapeterWithActorsResponseDTO addActorFromChapeter(Long chapeterId, Long actorId) throws NetflixNotFoundException;
 
 }

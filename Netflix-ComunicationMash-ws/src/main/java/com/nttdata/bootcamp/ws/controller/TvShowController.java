@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.ws.controller;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nttdata.bootcamp.exception.NetflixNotFoundException;
 import com.nttdata.bootcamp.service.TvShowService;
 import com.nttdata.bootcamp.service.responseModel.D4iPageRest;
 import com.nttdata.bootcamp.service.responseModel.NetflixResponse;
@@ -18,6 +20,7 @@ import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowResponseD
 import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithCategoryDTO;
 import com.nttdata.bootcamp.service.responseModel.responseTvShow.TvShowWithSeasonDTO;
 import com.nttdata.bootcamp.util.constant.CommonConstantsUtils;
+import com.nttdata.bootcamp.util.constant.ExceptionConstantsUtils;
 import com.nttdata.bootcamp.util.constant.RestConstantsUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +50,8 @@ public class TvShowController {
                         @RequestParam(defaultValue = CommonConstantsUtils.TWENTY) final int size,
                         @Parameter(hidden = true) final Pageable pageable) {
 
-                return tvshowService.getAllTvShows(pageable);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK, tvshowService.getAllTvShows(pageable));
         }
 
         @GetMapping(value = RestConstantsUtils.RESOURCE_TVSHOW
@@ -59,7 +63,14 @@ public class TvShowController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<TvShowResponseDTO> getTvShowById(@RequestParam final Long tvshowId) {
-                return tvshowService.getTvShowById(tvshowId);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, tvshowService.getTvShowById(tvshowId));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
 
         }
 
@@ -71,7 +82,8 @@ public class TvShowController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<TvShowResponseDTO> createTvShow(@RequestBody final TvShowResponseDTO tvshow) {
-                return tvshowService.createTvShow(tvshow);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK, tvshowService.createTvShow(tvshow));
 
         }
 
@@ -83,7 +95,15 @@ public class TvShowController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<TvShowResponseDTO> updateTvShow(@RequestBody final TvShowResponseDTO tvshow) {
-                return tvshowService.updateTvShow(tvshow);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, tvshowService.updateTvShow(tvshow));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
+
         }
 
         @DeleteMapping(value = RestConstantsUtils.RESOURCE_TVSHOW + RestConstantsUtils.RESOURCE_TVSHOWID)
@@ -94,7 +114,9 @@ public class TvShowController {
                         @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
         })
         public NetflixResponse<TvShowResponseDTO> deleteTvShow(@RequestParam final Long id) {
-                return tvshowService.deleteTvShow(id);
+                tvshowService.deleteTvShow(id);
+                return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                CommonConstantsUtils.OK);
         }
 
         @PostMapping(value = RestConstantsUtils.RESOURCE_TVSHOW
@@ -103,14 +125,31 @@ public class TvShowController {
         @Operation(summary = "setCategoryToTvShow", description = "set an existing category to an existing tv show")
         public NetflixResponse<TvShowWithCategoryDTO> setCategoryToTvShow(
                         @PathVariable final Long tvshowId, @PathVariable final Long categoryId) {
-                return tvshowService.setCategoryOfTvShow(tvshowId, categoryId);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK,
+                                        tvshowService.setCategoryOfTvShow(tvshowId, categoryId));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
+
         }
 
         @DeleteMapping(value = RestConstantsUtils.RESOURCE_TVSHOW + RestConstantsUtils.RESOURCE_TVSHOWID
                         + RestConstantsUtils.RESOURCE_CATEGORY)
         @Operation(summary = "deleteCategoryOfTvShow", description = "Delete an existing category from an existing tv show")
         public NetflixResponse<TvShowResponseDTO> deleteCategoryOnTvShow(@PathVariable final Long tvshowId) {
-                return tvshowService.deleteCategoryFromTvShow(tvshowId);
+                try {
+                        tvshowService.deleteCategoryFromTvShow(tvshowId);
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK);
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 
         @PostMapping(value = RestConstantsUtils.RESOURCE_TVSHOW
@@ -119,7 +158,15 @@ public class TvShowController {
         @Operation(summary = "addSeasonToTvShow", description = "Add an existing season to an existing tv show")
         public NetflixResponse<TvShowWithSeasonDTO> addSeasonToTvShow(@PathVariable final Long tvshowId,
                         @PathVariable final Long seasonId) {
-                return tvshowService.addSeasonOfTvShow(tvshowId, seasonId);
+                try {
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK, tvshowService.addSeasonOfTvShow(tvshowId, seasonId));
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
+
         }
 
         @DeleteMapping(value = RestConstantsUtils.RESOURCE_TVSHOW + RestConstantsUtils.RESOURCE_TVSHOWID
@@ -127,7 +174,15 @@ public class TvShowController {
         @Operation(summary = "deleteSeasonOfTvShow", description = "Delete an existing category from an existing tv show")
         public NetflixResponse<TvShowResponseDTO> deleteSeasonOnTvShow(
                         @PathVariable final Long tvshowId, @PathVariable final Long seasonId) {
-                return tvshowService.deleteSeasonOfTvShow(tvshowId, seasonId);
+                try {
+                        tvshowService.deleteSeasonOfTvShow(tvshowId, seasonId);
+                        return new NetflixResponse<>(HttpStatus.OK.toString(), String.valueOf(HttpStatus.OK.value()),
+                                        CommonConstantsUtils.OK);
+                } catch (NetflixNotFoundException e) {
+                        return new NetflixResponse<>(HttpStatus.NOT_FOUND.toString(),
+                                        String.valueOf(HttpStatus.NOT_FOUND.value()),
+                                        ExceptionConstantsUtils.NOT_FOUND_GENERIC);
+                }
         }
 
 }
