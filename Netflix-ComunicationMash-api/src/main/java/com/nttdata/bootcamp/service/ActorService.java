@@ -12,7 +12,7 @@ public interface ActorService {
 
     NetflixResponse<ActorResponseDTO> getActorById(Long id);
 
-    NetflixResponse<ActorResponseDTO> createActor(ActorResponseDTO actor);
+    NetflixResponse<ActorResponseDTO>   createActor(ActorResponseDTO actor);
 
     NetflixResponse<ActorResponseDTO> updateActor(ActorResponseDTO actor);
 

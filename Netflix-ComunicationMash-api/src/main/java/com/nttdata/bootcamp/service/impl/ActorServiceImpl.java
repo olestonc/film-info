@@ -36,7 +36,6 @@ public class ActorServiceImpl implements ActorService {
 
     private final SeasonRepository seasonRepository;
 
-    @Value("${com.nttdata.bootcamp.mapper.ActorMapper}")
     private final ActorMapper actorMapper;
 
     @Override

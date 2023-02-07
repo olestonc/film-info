@@ -50,13 +50,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Management Database Libraries -->
-        <!-- <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency> -->
-
-
     </dependencies>
     <build>
         <plugins>

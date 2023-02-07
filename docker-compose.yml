@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: netflix
+      MYSQL_USER: netflix
+      MYSQL_PASSWORD: netflix
+    ports:
+      - "3306:3306"
